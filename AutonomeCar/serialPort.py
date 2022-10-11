@@ -24,8 +24,8 @@ class SerialPort:
         return number
 
     def read_data(self):
-        if (self.port.in_waiting > 0):
+        if self.port.in_waiting > 0:
             data = self.port.readline()[:-2]
-            decodedData = str(data, 'utf-8')
+            decoded_data = str(data, 'utf-8')
             # print(decodedData)
-            self.message += decodedData
+            self.message += decoded_data
