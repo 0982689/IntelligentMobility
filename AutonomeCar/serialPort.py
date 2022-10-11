@@ -1,11 +1,11 @@
 import serial
 
 
-class serialPort:
+class SerialPort:
     message = ''
 
     def __init__(self, port, baud):
-        self.port = Serial(port, baud, timeout=.1)
+        self.port = serial.Serial(port, baud, timeout=.1)
         print("connected to: " + self.port.portstr)
         if not self.port.isOpen():
             self.port.open()
