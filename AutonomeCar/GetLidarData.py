@@ -1,4 +1,3 @@
-from turtle import distance
 from serialPort import serialPort
 from serial.tools.list_ports import comports
 from threading import Thread
