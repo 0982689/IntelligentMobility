@@ -1,11 +1,11 @@
 from serial import Serial
 
 
-class serialPort:
+class SerialPort:
     message = ''
 
     def __init__(self, port, baud):
-        self.port = Serial(port, baud, timeout=.1)
+        self.port = serial.Serial(port, baud, timeout=.1)
         print("connected to: " + self.port.portstr)
         if not self.port.isOpen():
             self.port.open()
@@ -24,8 +24,8 @@ class serialPort:
         return number
 
     def read_data(self):
-        if (self.port.in_waiting > 0):
+        if self.port.in_waiting > 0:
             data = self.port.readline()[:-2]
-            decodedData = str(data, 'utf-8')
+            decoded_data = str(data, 'utf-8')
             # print(decodedData)
-            self.message += decodedData
+            self.message += decoded_data
