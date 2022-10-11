@@ -19,8 +19,7 @@ class SerialPort:
         print("connected to: " + self.open_port.portstr)
 
     def send_data(self, data):
-        number = self.open_port.write(data)
-        return number
+        self.open_port.write(data)
 
     def read_data(self):
         if self.open_port.in_waiting > 0:

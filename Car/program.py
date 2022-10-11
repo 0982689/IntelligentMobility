@@ -14,9 +14,8 @@ class ReadAndProcess(Thread):
 
 
 class WriteJsonToFile(Thread):
-    def __init__(self, json_loc, serial_class):
+    def __init__(self, serial_class):
         Thread.__init__(self)
-        self.json_location = json_loc
         self.serial_class = serial_class
 
     def run(self):
@@ -29,12 +28,13 @@ class WriteJsonToFile(Thread):
             json_file = open("data.json", "w")
             json_file.write(json_string)
             json_file.close()
+            print(json_dict)
+
 
 if __name__ == "__main__":
     serial_arduino = SerialPort(9600)
-    json_location = "../"
     read_and_process_thread = ReadAndProcess(serial_class=serial_arduino)
-    write_json_file = WriteJsonToFile(json_loc=json_location, serial_class=serial_arduino)
+    write_json_file = WriteJsonToFile(serial_class=serial_arduino)
     read_and_process_thread.start()
     write_json_file.start()
     read_and_process_thread.join()
