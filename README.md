@@ -1,2 +1,2 @@
-# IntelligentMobility
-Project for intelligent mobility
+# Intelligent Mobility
+Project for Intelligent Mobility
