@@ -6,6 +6,7 @@ name = "pypi"
 [packages]
 pyserial = "*"
 numpy = "*"
+proto-plus = "*"
 
 [dev-packages]
 

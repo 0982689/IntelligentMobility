@@ -1,6 +1,8 @@
 from serial_port import SerialPort
 from threading import Thread
 import json
+from proto_dict import Dictionary
+
 
 
 class ReadAndProcess(Thread):
@@ -21,15 +23,33 @@ class WriteJsonToFile(Thread):
     def run(self):
         while True:
             serial_array = self.serial_class.return_processed_array()
-            json_dict = {}
-            for index in range(15):
-                json_dict.update({index: serial_array[index]})
+            json_dict = {index: value for index, value in enumerate(serial_array)}
             json_string = json.dumps(json_dict)
             json_file = open("data.json", "w")
             json_file.write(json_string)
             json_file.close()
             print(json_dict)
-
+         
+            
+class WriteProtobufToBinFile(Thread):
+    def __init__(self, serial_class):
+        Thread.__init__(self)
+        self.serial_class = serial_class
+        
+    def run(self):
+        while True:
+            serial_array = self.serial_class.return_processed_array()
+            proto_dict = {index: value for index, value in enumerate(serial_array)}
+            message = Dictionary(pairs=proto_dict)
+            serialized_msg = Dictionary.serialize(message)
+            with open("Car/proto.bin", "wb") as output:
+                output.write(serialized_msg)
+            
+            #with open("Car/proto.bin", "rb") as output: Example of reading a binary protobuf
+            #    serialized_msg = output.read()
+            #    message = Dictionary.deserialize(serialized_msg)
+            #    print(message.pairs[0]) Outputs distance at index 0. dict(message.pairs)[0] to make it a dict
+            
 
 if __name__ == "__main__":
     serial_arduino = SerialPort(9600)
