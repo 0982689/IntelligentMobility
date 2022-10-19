@@ -21,7 +21,11 @@ class SerialPort:
     def send_data(self, data):
         self.open_port.write(data)
 
-    def read_data(self):
+    def read_data(self) -> None:
+        """
+        Reads unprocessed data and converts it into processed data.
+        Processed array gets assigned.
+        """
         if self.open_port.in_waiting > 0:
             unprocessed_data = str(self.open_port.readline()[:-2], 'utf-8')
         else:
@@ -35,7 +39,7 @@ class SerialPort:
 
     def return_processed_array(self) -> Union[List[None], List[int]]:
         """
-        Returns processed array
+        Returns processed array.
         """
         return self.processed_array
 
