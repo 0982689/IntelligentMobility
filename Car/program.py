@@ -1,8 +1,5 @@
 from serial_port import SerialPort
 from threading import Thread
-import json
-from proto_dict import Dictionary
-
 
 
 class ReadAndProcess(Thread):
@@ -13,6 +10,8 @@ class ReadAndProcess(Thread):
     def run(self):
         while True:
             self.serial_class.read_data()
+            print(self.serial_class.return_processed_array())
+
 
 if __name__ == "__main__":
     serial_arduino = SerialPort(9600)
