@@ -8,8 +8,8 @@ import numpy as np
 
 ss.path += [os.path.abspath(relPath) for relPath in ('..',)]
 
-import simpylc_lib.simpylc.simulations.car.socket_wrapper as sw
-from simpylc_lib.simpylc.simulations.car.control_client import parameters as pm
+import simpylc.simulations.car.socket_wrapper as sw
+import parameters as pm
 import pickle
 from sklearn.neural_network import MLPRegressor
 
