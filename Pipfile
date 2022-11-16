@@ -9,6 +9,7 @@ numpy = "*"
 proto-plus = "*"
 scikit-learn = "*"
 pyopengl = "*"
+sklearn = "*"
 
 [dev-packages]
 
