@@ -11,8 +11,11 @@ class TestProgram(TestCase):
         read_and_process_thread.start()
         read_and_process_thread.join()
     
-    def test_processed_array(self):
+    def test_processed_array_not_none(self):
         self.assertNotIn(None, serialPort.processed_array)
+
+    def test_processed_array_none(self):
+        self.assertIn(None, serialPort.processed_array)
           
 if __name__ == "__main__":
     main()
