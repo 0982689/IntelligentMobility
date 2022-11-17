@@ -1,6 +1,6 @@
 from unittest import TestCase, main
-from program import ReadAndProcess
-from serial_port import SerialPort
+from ..program import ReadAndProcess
+from ..serial_port import SerialPort
 
 serialPort = SerialPort(9600)
 read_and_process_thread = ReadAndProcess(serial_class=serialPort)
