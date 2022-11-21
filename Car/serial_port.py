@@ -20,7 +20,7 @@ class SerialPort:
 
     def send_data(self, data) -> None:
         self.open_port.write(data)
-
+    
     def read_data(self) -> None:
         """
         Reads unprocessed data and converts it into processed data.

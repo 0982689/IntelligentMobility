@@ -4,13 +4,13 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-pyserial = "*"
 numpy = "*"
 proto-plus = "*"
 scikit-learn = "*"
 pyopengl = "*"
 sklearn = "*"
 pytest = "*"
+pyserial = "*"
 
 [dev-packages]
 
