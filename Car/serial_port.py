@@ -2,10 +2,7 @@ from serial import Serial
 from serial.tools.list_ports import comports
 from typing import Union, List
 
-# array of 9 + array of 9
-# 10 - 90 270 - 360
-
-def find_open_port():
+def find_open_port() -> Union[None, str]:
     ports = list(comports())
     for port in ports:
         return port[0]
