@@ -10,9 +10,9 @@ before starting the test.
 """
 try:
     serial_port = SerialPort(9600)
-    connected = False
-except SerialException:
     connected = True
+except SerialException:
+    connected = False
 
 class TestProgram(TestCase):
     
