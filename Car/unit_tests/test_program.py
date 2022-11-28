@@ -34,7 +34,7 @@ class TestProgram(TestCase):
         """
         self.assertNotIn(None, serial_port.processed_array)
 
-    @expectedFailure #This means that this test is allowed to fail.
+   #@expectedFailure #This means that this test is allowed to fail.
     def test_processed_array_none(self) -> None:
         """
         Test will succeed if None is in processed array, which means
