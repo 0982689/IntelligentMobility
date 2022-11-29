@@ -1,4 +1,4 @@
-from .serial_port import SerialPort
+from serial_port import SerialPort
 from threading import Thread
 from clients import AIClient, RLClient
 
