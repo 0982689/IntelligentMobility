@@ -6,16 +6,17 @@ import os
 import socket as sc
 import numpy as np
 
-ss.path += [os.path.abspath(relPath) for relPath in ('..',)]
-
 import simpylc_lib.simpylc.simulations.car.socket_wrapper as sw
 from simpylc_lib.simpylc.simulations.car.control_client import parameters as pm
 import pickle
 from sklearn.neural_network import MLPRegressor
 
+
+ss.path += [os.path.abspath(relPath) for relPath in ('..',)]
+
 finity = 20.0  # Needs to be float to obtain ditto numpy array
 
-lidarInputDim = 15
+lidar_input_dim = 15
 
 sampleFileName = 'default.samples'
 
@@ -69,13 +70,13 @@ class AIClient:
 
         if not self.halfApertureAngle:
             self.halfApertureAngle = sensors['halfApertureAngle']
-            self.sectorAngle = 2 * self.halfApertureAngle / lidarInputDim
+            self.sectorAngle = 2 * self.halfApertureAngle / lidar_input_dim
             self.halfMiddleApertureAngle = sensors['halfMiddleApertureAngle']
 
         self.lidarDistances = sensors['lidarDistances']
 
     def lidarSweep(self):
-        sample = [finity for eI in range(lidarInputDim)]
+        sample = [finity for eI in range(lidar_input_dim)]
         for lidarAngle in range(-self.halfApertureAngle, self.halfApertureAngle):
             sectorIndex = round(lidarAngle / self.sectorAngle)
             sample[sectorIndex] = min(sample[sectorIndex], self.lidarDistances[lidarAngle])

@@ -9,6 +9,7 @@ numpy = "*"
 proto-plus = "*"
 scikit-learn = "*"
 pyopengl = "*"
+adafruit-pca9685 = "*"
 
 [dev-packages]
 

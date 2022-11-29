@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "2700fb80b2909b82fa221e9fccb464c44b58cfc80c900ecf086f91bf74db5332"
+            "sha256": "353ecc09f311c0eeb41fff664c875500f0cb53b16eb1f0fa9ee74287fe959250"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -16,6 +16,27 @@
         ]
     },
     "default": {
+        "adafruit-gpio": {
+            "hashes": [
+                "sha256:d6465b92c866c51ca8f3bc1e8f2ec36f5ccdb46d0fd54101c1109756d4a2dcd0"
+            ],
+            "version": "==1.0.3"
+        },
+        "adafruit-pca9685": {
+            "hashes": [
+                "sha256:24d632c912a23f44416369555f3f39f2509975b89d37955f125bc009040a1dfd",
+                "sha256:24d9c8c1fd17093d3255823c5b43f7dccd0b95a042d663832af473507f188ea9"
+            ],
+            "index": "pypi",
+            "version": "==1.0.1"
+        },
+        "adafruit-pureio": {
+            "hashes": [
+                "sha256:2caf22fb07c7f771d83267f331a76cde314723f884a9570ea6f768730c87a879"
+            ],
+            "markers": "python_full_version >= '3.5.0'",
+            "version": "==1.1.9"
+        },
         "joblib": {
             "hashes": [
                 "sha256:091138ed78f800342968c523bdde947e7a305b8594b910a0fea2ab83c3c6d385",
