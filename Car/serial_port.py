@@ -1,26 +1,23 @@
-import serial
-import serial.tools.list_ports
+from serial import Serial
+from serial.tools.list_ports import comports
 from typing import Union, List
 
-
-# 150 degrees : 10 = 15 angles. array 14
-
-def find_open_port():
-    ports = list(serial.tools.list_ports.comports())
+def find_open_port() -> Union[None, str]:
+    ports = list(comports())
     for port in ports:
         return port[0]
 
 
 class SerialPort:
-    def __init__(self, baud):
+    def __init__(self, baud) -> None:
         port = find_open_port()
-        self.processed_array = [None] * 15
-        self.open_port = serial.Serial(port, baud, timeout=.1)
-        print("connected to: " + self.open_port.portstr)
+        self.processed_array = [None] * 18
+        self.open_port = Serial(port, baud, timeout=.1)
+        print(f"connected to: {self.open_port.portstr}")
 
-    def send_data(self, data):
+    def send_data(self, data) -> None:
         self.open_port.write(data)
-
+    
     def read_data(self) -> None:
         """
         Reads unprocessed data and converts it into processed data.
@@ -32,8 +29,7 @@ class SerialPort:
             return
 
         temp_data = unprocessed_data.split(",")
-        for idx, string_int in enumerate(temp_data):
-            temp_data[idx] = int(string_int)
+        temp_data = [int(temp_data[id]) for id in range(9, 90, 10)] + [int(temp_data[id]) for id in range(269, 360, 10)]
 
         self.processed_array = temp_data
 
