@@ -1,18 +1,9 @@
-from unittest import TestCase, main, expectedFailure
+from unittest import TestCase, main
 from ..program import ReadAndProcess
 from ..serial_port import SerialPort
-from serial.serialutil import SerialException
 
-"""
-Checks for a SerialException when 
-instantiating the SerialPort class 
-before starting the test.
-"""
-try:
-    serial_port = SerialPort(9600)
-    connected = True
-except SerialException:
-    connected = False
+serial_port = SerialPort(9600)
+connected = serial_port.open_port.is_open
 
 class TestProgram(TestCase):
     
@@ -22,11 +13,11 @@ class TestProgram(TestCase):
         starting the read and process thread for tests.
         """
         if not connected:
-            self.skipTest("Could not connect to comport.")
+            self.skipTest("Could not connect to comport.") #Skips all the tests inside this class
         read_and_process_thread = ReadAndProcess(serial_class=serial_port)
         read_and_process_thread.start()
         read_and_process_thread.join()
-    
+      
     def test_processed_array_not_none(self) -> None:
         """
         Test will fail if None is in processed array, which means
@@ -34,7 +25,6 @@ class TestProgram(TestCase):
         """
         self.assertNotIn(None, serial_port.processed_array)
 
-    @expectedFailure #This means that this test is allowed to fail.
     def test_processed_array_none(self) -> None:
         """
         Test will succeed if None is in processed array, which means
