@@ -24,15 +24,15 @@ X = np.loadtxt("default.samples", delimiter=' ')
 modelSaveFile = 'model.sav'
 
 
-def getTargetVelocity(steeringAngle):
+def getTargetVelocity(steeringAngle) -> float:
     return (90 - abs(steeringAngle)) / 60
 
 
 class AIClient:
-    def __init__(self):
+    def __init__(self) -> None:
         self.steeringAngle = 0
 
-    def train_network(self):
+    def train_network(self) -> None:
         print("Training...")
         self.neuralNet = MLPRegressor(learning_rate_init=0.010,
                                       n_iter_no_change=2000,
@@ -45,7 +45,7 @@ class AIClient:
         pickle.dump(self.neuralNet, open(modelSaveFile, 'wb'))
         print(f"Training finished in {self.neuralNet.n_iter_} cycles.")
 
-    def use_sim(self):
+    def use_sim(self) -> None:
         try:
             self.neuralNet = pickle.load(open(modelSaveFile, 'rb'))
         except Exception:
@@ -62,7 +62,7 @@ class AIClient:
                 self.output()
                 tm.sleep(0.02)
 
-    def input(self):
+    def input(self) -> None:
         sensors = self.socketWrapper.recv()
 
         if not self.halfApertureAngle:
@@ -72,8 +72,8 @@ class AIClient:
 
         self.lidarDistances = sensors['lidarDistances']
 
-    def lidarSweep(self):
-        sample = [finity for eI in range(lidar_input_dim)]
+    def lidarSweep(self) -> None:
+        sample = [finity for _ in range(lidar_input_dim)]
         for lidarAngle in range(-self.halfApertureAngle, self.halfApertureAngle):
             sectorIndex = round(lidarAngle / self.sectorAngle)
             sample[sectorIndex] = min(sample[sectorIndex], self.lidarDistances[lidarAngle])
@@ -92,7 +92,7 @@ class AIClient:
 
         self.targetVelocity = getTargetVelocity(self.steeringAngle)
 
-    def output(self):
+    def output(self) -> None:
         actuators = {
             'steeringAngle': self.steeringAngle,
             'targetVelocity': self.targetVelocity
@@ -102,6 +102,6 @@ class AIClient:
 
 
 class RLClient:
-    def __init__(self):
+    def __init__(self) -> None:
         self.motors = PWMMotors()
         self.servo = PWMServo()

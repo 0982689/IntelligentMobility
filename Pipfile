@@ -10,6 +10,7 @@ proto-plus = "*"
 scikit-learn = "*"
 pyopengl = "*"
 adafruit-pca9685 = "*"
+adafruit-gpio = "*"
 
 [dev-packages]
 
