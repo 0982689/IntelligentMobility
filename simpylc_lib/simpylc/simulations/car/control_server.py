@@ -29,7 +29,7 @@ import socket as sc
 import time as tm
 
 import simpylc as sp
-import control_client.socket_wrapper as sw
+import socket_wrapper as sw
 
 class ControlServer:
     def __init__ (self):
