@@ -42,7 +42,7 @@ import simpylc as sp
 
 import dimensions as dm
 
-normalFloorColor = (0, 0.001, 0)
+normalFloorColor = (0, 0, 0.001)
 collisionFloorColor = (1, 0, 0.3)
 normalTireColor = (0.03, 0.03, 0.03)
 
