@@ -6,7 +6,6 @@ name = "pypi"
 [packages]
 pyserial = "*"
 numpy = "*"
-proto-plus = "*"
 scikit-learn = "*"
 pyopengl = "*"
 adafruit-pca9685 = "*"
