@@ -7,7 +7,6 @@ import os
 import socket as sc
 import numpy as np
 import simpylc_lib.simpylc.simulations.car.socket_wrapper as sw
-from simpylc_lib.simpylc.simulations.car.control_client import parameters as pm
 import pickle
 from sklearn.neural_network import MLPRegressor
 
