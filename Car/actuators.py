@@ -49,5 +49,5 @@ class PWMMotors:
         self.motor_left = _PWMMotorLeft()
 
     def set_pulse(self, pulse):
-        self.motor_left.set_pulse(pulse=pulse)
-        self.motor_right.set_pulse(pulse=pulse)
+        self.motor_left.run(pulse=pulse)
+        self.motor_right.run(pulse=pulse)

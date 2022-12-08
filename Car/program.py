@@ -9,7 +9,7 @@ class ReadAndProcess(Thread):
         Thread.__init__(self)
         self.serial_class = serial_class
 
-    # Standard run class from package thread which prints the data from the aruino
+    # Standard run class from package thread which prints the data from the arduino
     def run(self):
         while True:
             self.serial_class.read_data()
@@ -23,6 +23,6 @@ if __name__ == "__main__":
     # read_and_process_thread.start()
     # read_and_process_thread.join()
     client = RLClient()
-    client.servo.set_pulse(10)
+    client.servo.run(10)
     # client = AIClient()
     # client.use_sim()
