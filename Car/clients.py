@@ -46,7 +46,8 @@ class AIClient:
 
     def use_sim(self) -> None:
         try:
-            self.neuralNet = pickle.load(open(modelSaveFile, 'rb'))
+            with open(modelSaveFile, 'rb') as file:
+                self.neuralNet = pickle.load(file)
         except Exception:
             raise FileNotFoundError
         print("Loaded model.")
@@ -104,3 +105,4 @@ class RLClient:
     def __init__(self) -> None:
         self.motors = PWMMotors()
         self.servo = PWMServo()
+
