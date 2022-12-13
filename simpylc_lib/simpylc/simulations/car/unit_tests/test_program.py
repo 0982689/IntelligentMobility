@@ -1,6 +1,6 @@
 from unittest import TestCase, main
-from ..program import ReadAndProcess
-from ..serial_port import SerialPort
+from simpylc_lib.simpylc.simulations.car.program import ReadAndProcess
+from simpylc_lib.simpylc.simulations.car.serial_port import SerialPort
 
 serial_port = SerialPort(9600)
 connected = serial_port.open_port.is_open
