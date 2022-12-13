@@ -1,4 +1,3 @@
-from Car.serial_port import SerialPort
 from threading import Thread
 from Car.clients import RLClient
 
