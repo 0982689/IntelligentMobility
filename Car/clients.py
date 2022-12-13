@@ -1,7 +1,7 @@
 import time as tm
 import traceback as tb
 import math as mt
-from actuators import PWMMotors, PWMServo
+from Car.actuators import PWMMotors, PWMServo
 import sys as ss
 import os
 import socket as sc
@@ -76,7 +76,8 @@ class AIClient:
         sample = [finity for _ in range(lidar_input_dim)]
         for lidarAngle in range(-self.halfApertureAngle, self.halfApertureAngle):
             sectorIndex = round(lidarAngle / self.sectorAngle)
-            sample[sectorIndex] = min(sample[sectorIndex], self.lidarDistances[lidarAngle])
+            sample[sectorIndex] = min(
+                sample[sectorIndex], self.lidarDistances[lidarAngle])
 
         lowest = sample[:]
         lowest.sort()
@@ -105,4 +106,3 @@ class RLClient:
     def __init__(self) -> None:
         self.motors = PWMMotors()
         self.servo = PWMServo()
-
