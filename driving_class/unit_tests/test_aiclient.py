@@ -4,7 +4,7 @@ import os
 import matplotlib.pyplot as plt
 from ..clients import AIClient
 
-modelSaveFile = os.path.realpath('Car\\model.sav')
+modelSaveFile = os.path.realpath('driving_class\\model.sav')
 
 class TestAIClient(TestCase):
     

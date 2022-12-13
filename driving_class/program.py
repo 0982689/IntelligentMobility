@@ -1,6 +1,6 @@
-from Car.serial_port import SerialPort
+from driving_class.serial_port import SerialPort
 from threading import Thread
-from Car.clients import AIClient, RLClient
+from driving_class.clients import AIClient, RLClient
 
 
 # Make threaded class for reading the arduino via serial

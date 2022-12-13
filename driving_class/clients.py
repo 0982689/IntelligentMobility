@@ -1,7 +1,7 @@
 import time as tm
 import traceback as tb
 import math as mt
-from Car.actuators import PWMMotors, PWMServo
+from driving_class.actuators import PWMMotors, PWMServo
 import sys as ss
 import os
 import socket as sc
