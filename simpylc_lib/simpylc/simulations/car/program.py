@@ -1,5 +1,5 @@
 from threading import Thread
-from simpylc_lib.simpylc.simulations.car.clients import RLClient
+from clients import AIClient, RLClient
 
 
 # Make threaded class for reading the arduino via serial
@@ -21,8 +21,8 @@ if __name__ == "__main__":
     # read_and_process_thread = ReadAndProcess(serial_class=serial_arduino)
     # read_and_process_thread.start()
     # read_and_process_thread.join()
-    client = RLClient()
-    client.servo.set_pulse(10)
-    # client = AIClient()
+    # client = RLClient()
+    # client.servo.set_pulse(10)
+    client = AIClient()
     # client.use_sim()
-    # client.plot_loss()
+    client.plot_loss()

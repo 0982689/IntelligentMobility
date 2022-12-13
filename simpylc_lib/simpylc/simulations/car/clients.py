@@ -7,6 +7,8 @@ import numpy as np
 import pickle
 import socket_wrapper as sw
 from sklearn.neural_network import MLPRegressor
+import matplotlib.pyplot as plt
+from sklearn.preprocessing import MinMaxScaler
 
 ss.path += [os.path.abspath(relPath) for relPath in ('..',)]
 
@@ -24,6 +26,9 @@ modelSaveFile = 'model.sav'
 def getTargetVelocity(steeringAngle) -> float:
     return (90 - abs(steeringAngle)) / 60
 
+def normalize_data() -> None:
+        scaler = MinMaxScaler()
+        X[:, :-1] = scaler.fit_transform(X[:, :-1])
 
 class AIClient:
     def __init__(self) -> None:
@@ -31,6 +36,7 @@ class AIClient:
 
     def train_network(self) -> None:
         print("Training...")
+        normalize_data()
         self.neuralNet = MLPRegressor(learning_rate_init=0.010,
                                       n_iter_no_change=2000,
                                       verbose=True,
@@ -98,6 +104,30 @@ class AIClient:
         }
 
         self.socketWrapper.send(actuators)
+        
+    def plot_loss(self) -> None:
+        """
+        Plots the model loss over the number of iterations it has performed.
+        If a model is not found, it wil create a new one.
+        """
+        try:
+            with open(modelSaveFile, 'rb') as file:
+                self.neuralNet = pickle.load(file)
+        except Exception:
+            self.train_network()
+            with open(modelSaveFile, 'rb') as file:
+                self.neuralNet = pickle.load(file)
+            
+        loss_values = self.neuralNet.loss_curve_
+        best_loss = self.neuralNet.best_loss_
+        best_loss_iteration = loss_values.index(best_loss)
+        plt.figure("Loss per iteration")
+        plt.plot(loss_values, label="Loss")
+        plt.plot(best_loss_iteration, best_loss, 'ro', label=f"Best loss ({round(best_loss, 2)})")
+        plt.xlabel("Iterations")
+        plt.ylabel("Loss")
+        plt.legend()
+        plt.show()
 
 
 class RLClient:
