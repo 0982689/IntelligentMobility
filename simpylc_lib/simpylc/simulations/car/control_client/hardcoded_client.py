@@ -34,7 +34,7 @@ import socket as sc
 
 ss.path += [os.path.abspath(relPath) for relPath in ('..',)]
 
-import socket_wrapper as sw
+import simpylc.simulations.car.socket_wrapper as sw
 import parameters as pm
 
 
