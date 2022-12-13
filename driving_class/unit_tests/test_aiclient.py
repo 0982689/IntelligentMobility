@@ -3,7 +3,7 @@ import pickle
 import os
 from ..clients import AIClient
 
-modelSaveFile = os.path.realpath('Car\\model.sav')
+modelSaveFile = os.path.realpath('driving_class\\model.sav')
 
 """
 Run with pytest
