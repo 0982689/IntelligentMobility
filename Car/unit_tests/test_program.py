@@ -5,7 +5,9 @@ from ..serial_port import SerialPort
 serial_port = SerialPort(9600)
 connected = serial_port.open_port.is_open
 
-
+"""
+Run with pytest
+"""
 class TestProgram(TestCase):
 
     def setUp(self) -> None:

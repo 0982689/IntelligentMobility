@@ -1,14 +1,16 @@
 import time as tm
 import traceback as tb
 import math as mt
-from Car.actuators import PWMMotors, PWMServo
+from actuators import PWMMotors, PWMServo
 import sys as ss
 import os
 import socket as sc
 import numpy as np
 import simpylc_lib.simpylc.simulations.car.socket_wrapper as sw
 import pickle
+import matplotlib.pyplot as plt
 from sklearn.neural_network import MLPRegressor
+from sklearn.preprocessing import MinMaxScaler
 
 ss.path += [os.path.abspath(relPath) for relPath in ('..',)]
 
@@ -30,9 +32,14 @@ def getTargetVelocity(steeringAngle) -> float:
 class AIClient:
     def __init__(self) -> None:
         self.steeringAngle = 0
+        
+    def normalize_data(self) -> None:
+        scaler = MinMaxScaler()
+        X[:, :-1] = scaler.fit_transform(X[:, :-1])
 
     def train_network(self) -> None:
         print("Training...")
+        self.normalize_data()
         self.neuralNet = MLPRegressor(learning_rate_init=0.010,
                                       n_iter_no_change=2000,
                                       verbose=True,
@@ -100,6 +107,30 @@ class AIClient:
         }
 
         self.socketWrapper.send(actuators)
+        
+    def plot_loss(self) -> None:
+        """
+        Plots the model loss over the number of iterations it has performed.
+        If a model is not found, it wil create a new one.
+        """
+        try:
+            with open(modelSaveFile, 'rb') as file:
+                self.neuralNet = pickle.load(file)
+        except Exception:
+            self.train_network()
+            with open(modelSaveFile, 'rb') as file:
+                self.neuralNet = pickle.load(file)
+            
+        loss_values = self.neuralNet.loss_curve_
+        best_loss = self.neuralNet.best_loss_
+        best_loss_iteration = loss_values.index(best_loss)
+        plt.figure("Loss per iteration")
+        plt.plot(loss_values, label="Loss")
+        plt.plot(best_loss_iteration, best_loss, 'ro', label=f"Best loss ({round(best_loss, 2)})")
+        plt.xlabel("Iterations")
+        plt.ylabel("Loss")
+        plt.legend()
+        plt.show()
 
 
 class RLClient:
