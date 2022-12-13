@@ -1,6 +1,6 @@
 from Car.serial_port import SerialPort
 from threading import Thread
-from Car.clients import AIClient, RLClient
+from Car.clients import RLClient
 
 
 # Make threaded class for reading the arduino via serial
@@ -22,7 +22,7 @@ if __name__ == "__main__":
     # read_and_process_thread = ReadAndProcess(serial_class=serial_arduino)
     # read_and_process_thread.start()
     # read_and_process_thread.join()
-    client = AIClient()
-    client.use_sim()
+    client = RLClient()
+    client.servo.set_pulse(10)
     # client = AIClient()
     # client.use_sim()
