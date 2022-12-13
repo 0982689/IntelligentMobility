@@ -5,19 +5,21 @@ from ..serial_port import SerialPort
 serial_port = SerialPort(9600)
 connected = serial_port.open_port.is_open
 
+
 class TestProgram(TestCase):
-    
+
     def setUp(self) -> None:
         """
         Instantiating the SerialPort class and 
         starting the read and process thread for tests.
         """
         if not connected:
-            self.skipTest("Could not connect to comport.") #Skips all the tests inside this class
+            # Skips all the tests inside this class
+            self.skipTest("Could not connect to comport.")
         read_and_process_thread = ReadAndProcess(serial_class=serial_port)
         read_and_process_thread.start()
         read_and_process_thread.join()
-      
+
     def test_processed_array_not_none(self) -> None:
         """
         Test will fail if None is in processed array, which means
@@ -32,6 +34,6 @@ class TestProgram(TestCase):
         """
         self.assertIn(None, serial_port.processed_array)
 
+
 if __name__ == "__main__":
     main()
-        
