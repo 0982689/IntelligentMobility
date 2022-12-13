@@ -2,7 +2,7 @@ from unittest import TestCase, main
 import pickle
 import os
 import matplotlib.pyplot as plt
-from ..clients import AIClient
+from simpylc_lib.simpylc.simulations.car.clients import AIClient
 
 modelSaveFile = os.path.realpath('driving_class\\model.sav')
 
