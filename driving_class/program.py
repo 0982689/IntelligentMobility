@@ -1,5 +1,6 @@
+from serial_port import SerialPort
 from threading import Thread
-from simpylc_lib.simpylc.simulations.car.clients import RLClient
+from clients import AIClient, RLClient
 
 
 # Make threaded class for reading the arduino via serial

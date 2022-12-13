@@ -1,8 +1,7 @@
 from unittest import TestCase, main
 import pickle
 import os
-import matplotlib.pyplot as plt
-from simpylc_lib.simpylc.simulations.car.clients import AIClient
+from ..clients import AIClient
 
 modelSaveFile = os.path.realpath('driving_class\\model.sav')
 
