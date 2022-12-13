@@ -1,6 +1,6 @@
-from driving_class.serial_port import SerialPort
+from serial_port import SerialPort
 from threading import Thread
-from driving_class.clients import AIClient, RLClient
+from clients import AIClient, RLClient
 
 
 # Make threaded class for reading the arduino via serial
