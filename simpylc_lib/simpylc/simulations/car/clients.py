@@ -7,8 +7,8 @@ import numpy as np
 import pickle
 import socket_wrapper as sw
 from sklearn.neural_network import MLPRegressor
-import matplotlib.pyplot as plt
 from sklearn.preprocessing import MinMaxScaler
+import matplotlib.pyplot as plt
 
 ss.path += [os.path.abspath(relPath) for relPath in ('..',)]
 
@@ -27,8 +27,8 @@ def getTargetVelocity(steeringAngle) -> float:
     return (90 - abs(steeringAngle)) / 60
 
 def normalize_data() -> None:
-        scaler = MinMaxScaler()
-        X[:, :-1] = scaler.fit_transform(X[:, :-1])
+    scaler = MinMaxScaler()
+    X[:, :-1] = scaler.fit_transform(X[:, :-1])
 
 class AIClient:
     def __init__(self) -> None:
@@ -37,11 +37,12 @@ class AIClient:
     def train_network(self) -> None:
         print("Training...")
         normalize_data()
-        self.neuralNet = MLPRegressor(learning_rate_init=0.010,
-                                      n_iter_no_change=2000,
+        self.neuralNet = MLPRegressor(learning_rate_init=0.01,
+                                      learning_rate='constant',
+                                      n_iter_no_change=1000,
                                       verbose=True,
                                       random_state=1,
-                                      hidden_layer_sizes=15,
+                                      hidden_layer_sizes=150,
                                       max_iter=100000)
         self.neuralNet.fit(X[:, :-1], X[:, -1])
         print(self.neuralNet.best_loss_)
