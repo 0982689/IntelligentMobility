@@ -23,6 +23,6 @@ if __name__ == "__main__":
     # read_and_process_thread.join()
     client = RLClient()
     while True:
-        client.servo.set_pulse(300)
+        client.servo.set_pulse(400)
     # client = AIClient()
     # client.use_sim()
