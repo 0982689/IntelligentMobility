@@ -33,9 +33,9 @@ class _PCA9685:
 # Steering channel = 12, Throttle channel = 13
 class PWMServo(_PCA9685):
     def __init__(self, channel: int = 0) -> None:
-        super().__init__(channel=channel)
+        super().__init__(channel=channel, busnum=1)
 
 
 class PWMMotors(_PCA9685):
     def __init__(self, channel: int = 1) -> None:
-        super().__init__(channel=channel)
+        super().__init__(channel=channel, busnum=0)
