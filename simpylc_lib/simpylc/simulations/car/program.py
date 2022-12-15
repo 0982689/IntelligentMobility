@@ -15,7 +15,7 @@ class ReadAndProcess(Thread):
             print(self.serial_class.return_processed_array())
 
 
-# 40, 200, 400
+# 40, 200, 360
 # Main starts program to read serial
 if __name__ == "__main__":
     # serial_arduino = SerialPort(9600)
@@ -23,6 +23,6 @@ if __name__ == "__main__":
     # read_and_process_thread.start()
     # read_and_process_thread.join()
     client = RLClient()
-    client.servo.set_pulse(380)
+    client.servo.set_pulse(360)
     # client = AIClient()
     # client.use_sim()
