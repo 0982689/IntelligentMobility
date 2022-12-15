@@ -30,65 +30,12 @@ class _PCA9685:
         self.set_pulse(pulse)
 
 
-class PWMThrottle:
-    """
-    Wrapper over a PWM motor controller to convert -1 to 1 throttle
-    values to PWM pulses.
-    """
-    MIN_THROTTLE = -1
-    MAX_THROTTLE = 1
-
-    def __init__(self,
-                 controller=None,
-                 max_pulse=300,
-                 min_pulse=490,
-                 zero_pulse=350):
-
-        self.controller = controller
-        self.max_pulse = max_pulse
-        self.min_pulse = min_pulse
-        self.zero_pulse = zero_pulse
-        self.pulse = zero_pulse
-
-        # send zero pulse to calibrate ESC
-        print("Init ESC")
-        self.controller.set_pulse(self.max_pulse)
-        time.sleep(0.01)
-        self.controller.set_pulse(self.min_pulse)
-        time.sleep(0.01)
-        self.controller.set_pulse(self.zero_pulse)
-        time.sleep(1)
-        self.running = True
-        print('PWM Throttle created')
-
-    def update(self):
-        while self.running:
-            self.controller.set_pulse(self.pulse)
-
-    def run_threaded(self, throttle):
-        if throttle > 0:
-            self.pulse = map_range(throttle, 0, self.MAX_THROTTLE,
-                                   self.zero_pulse, self.max_pulse)
-        else:
-            self.pulse = map_range(throttle, self.MIN_THROTTLE, 0,
-                                   self.min_pulse, self.zero_pulse)
-
-    def run(self, throttle):
-        self.run_threaded(throttle)
-        self.controller.set_pulse(self.pulse)
-
-    def shutdown(self):
-        # stop vehicle
-        self.run(0)
-        self.running = False
-
-
 # Steering channel = 12, Throttle channel = 13
 class PWMServo(_PCA9685):
     def __init__(self, channel: int = 0) -> None:
-        super().__init__(channel=channel)
+        super().__init__(channel=channel, busnum=0)
 
 
 class PWMMotors(_PCA9685):
-    def __init__(self, channel: int = 1) -> None:
-        super().__init__(channel=channel)
+    def __init__(self, channel: int = 0) -> None:
+        super().__init__(channel=channel, busnum=1)
