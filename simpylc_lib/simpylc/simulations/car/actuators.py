@@ -36,7 +36,7 @@ class PWMServo(_PCA9685):
 
 
 class PWMMotors(_PCA9685):
-    def __init__(self, channel: int = 11) -> None:
+    def __init__(self, channel: int = 14) -> None:
         super().__init__(channel=channel)
 
 
