@@ -6,7 +6,7 @@ from utils import map_range
 
 
 class _PCA9685:
-    def __init__(self, channel, address=0x40, frequency=60, busnum=None, init_delay=0.1) -> None:
+    def __init__(self, channel, address=0x60, frequency=60, busnum=None, init_delay=0.1) -> None:
         self.default_freq = 60
         self.pwm_scale = frequency / self.default_freq
         if busnum is not None:
@@ -37,5 +37,5 @@ class PWMServo(_PCA9685):
 
 
 class PWMMotors(_PCA9685):
-    def __init__(self, channel: int = 1) -> None:
+    def __init__(self, channel: int = 0) -> None:
         super().__init__(channel=channel, busnum=1)
