@@ -14,6 +14,7 @@ class _PCA9685:
                 return busnum
 
             I2C.get_default_bus = get_bus
+        print(I2C.get_i2c_device(address=address))
         self.pwm = Adafruit_PCA9685.PCA9685(address=address)
         self.pwm.set_pwm_freq(frequency)
         self.channel = channel
@@ -38,4 +39,4 @@ class PWMServo(_PCA9685):
 
 class PWMMotors(_PCA9685):
     def __init__(self, channel: int = 0) -> None:
-        super().__init__(channel=channel, busnum=0X40)
+        super().__init__(channel=channel, busnum=1)
