@@ -15,7 +15,7 @@ class _PCA9685:
 
             I2C.get_default_bus = get_bus
         device = I2C.get_i2c_device(address=address)
-        device = device._bus.bus
+        device = device._bus.read_i2c_block_data
         print(device)
         self.pwm = Adafruit_PCA9685.PCA9685(address=address)
         self.pwm.set_pwm_freq(frequency)
