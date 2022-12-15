@@ -24,7 +24,7 @@ class _PCA9685:
         #     self.pwm.set_pwm(self.channel, 0, int(pulse * self.pwm_scale))
         # except:
         #     self.pwm.set_pwm(self.channel, 0, int(pulse * self.pwm_scale))
-        self.pwm.set_pwm(self.channel, 400, int(pulse * self.pwm_scale))
+        self.pwm.set_pwm(self.channel, 0, int(pulse * self.pwm_scale))
 
     def run(self, pulse) -> None:
         self.set_pulse(pulse)
