@@ -28,7 +28,7 @@ if __name__ == "__main__":
         try:
             print(f"Busnum = {z}")
             client.motors.busnum = z
-            for y in range (1, 16):
+            for y in range (0, 16):
                 client.motors.channel = y
                 print(f"Busnum {z} with channel: {client.motors.channel}")
                 # for x in range(100, 2000, 100):
