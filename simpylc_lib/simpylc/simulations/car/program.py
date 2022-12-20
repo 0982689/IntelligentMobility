@@ -5,23 +5,23 @@ from clients import RLClient
 
 # Make threaded class for reading the arduino via serial
 class ReadAndProcess(Thread):
-    def __init__(self, serial_class: SerialPort = ...):
+    def __init__(self, serial_class: SerialPort = ...) -> None:
         Thread.__init__(self)
         self.serial_class = serial_class
 
     # Standard run class from package thread which prints the data from the arduino
-    def run(self):
+    def run(self) -> None:
         while True:
             self.serial_class.read_data()
             print(self.serial_class.return_processed_array())
 
 
 class DriveClient(Thread):
-    def __init__(self, rl_client: RLClient = ...):
+    def __init__(self, rl_client: RLClient = ...) -> None:
         Thread.__init__(self)
         self.rl_client = rl_client
 
-    def run(self):
+    def run(self) -> None:
         self.rl_client.start_client()
         while True:
             self.rl_client.run_with_lidar()

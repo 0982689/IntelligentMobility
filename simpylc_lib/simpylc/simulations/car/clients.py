@@ -28,9 +28,11 @@ modelSaveFile = 'model.sav'
 def getTargetVelocity(steeringAngle) -> float:
     return (90 - abs(steeringAngle)) / 60
 
+
 def normalize_data() -> None:
     scaler = MinMaxScaler()
     X[:, :-1] = scaler.fit_transform(X[:, :-1])
+
 
 class AIClient:
     def __init__(self) -> None:
@@ -107,7 +109,7 @@ class AIClient:
         }
 
         self.socketWrapper.send(actuators)
-        
+
     def plot_loss(self) -> None:
         """
         Plots the model loss over the number of iterations it has performed.
@@ -120,7 +122,7 @@ class AIClient:
             self.train_network()
             with open(modelSaveFile, 'rb') as file:
                 self.neuralNet = pickle.load(file)
-            
+
         loss_values = self.neuralNet.loss_curve_
         best_loss = self.neuralNet.best_loss_
         best_loss_iteration = loss_values.index(best_loss)
@@ -149,7 +151,7 @@ class RLClient:
             raise FileNotFoundError
         print("Loaded model.")
 
-    def run_with_lidar(self):
+    def run_with_lidar(self) -> None:
         steering_angle = self.neural_net_rl.predict(self.serial_class.return_processed_array())
         self.servo.set_pulse(int(steering_angle))
         time.sleep(.2)
