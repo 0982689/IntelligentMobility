@@ -6,10 +6,10 @@ import socket as sc
 import numpy as np
 import pickle
 import socket_wrapper as sw
-from sklearn.neural_network import MLPRegressor
-from sklearn.preprocessing import MinMaxScaler
 import matplotlib.pyplot as plt
-from sklearn.model_selection import GridSearchCV, cross_val_score, cross_validate
+from sklearn.neural_network import MLPRegressor
+from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import r2_score
 
 ss.path += [os.path.abspath(relPath) for relPath in ('..',)]
 
@@ -23,7 +23,7 @@ samples = np.loadtxt("default.samples", delimiter=' ')
 X = samples[:, :-1]
 Y = samples[:, -1]
 
-modelSaveFile = 'tempmodel.sav'#'model.sav'
+modelSaveFile = 'model.sav'
 
 
 def getTargetVelocity(steeringAngle) -> float:
@@ -31,7 +31,7 @@ def getTargetVelocity(steeringAngle) -> float:
 
 def normalize_data() -> None:
     global X
-    scaler = MinMaxScaler()
+    scaler = StandardScaler()
     X = scaler.fit_transform(X)
 
 class AIClient:
@@ -43,13 +43,11 @@ class AIClient:
         normalize_data()
         self.neuralNet = MLPRegressor(learning_rate_init=.01,
                                       n_iter_no_change=2000,
-                                      learning_rate='constant',
                                       activation='tanh',
                                       verbose=True,
-                                      alpha=0.05,
                                       random_state=1,
-                                      hidden_layer_sizes=(50, 100, 50),
-                                      max_iter=30000)
+                                      hidden_layer_sizes=(100, 50),
+                                      max_iter=20000)
         self.neuralNet.fit(X, Y)
         pickle.dump(self.neuralNet, open(modelSaveFile, 'wb'))
         print(f"Training finished in {self.neuralNet.n_iter_} cycles.")
@@ -110,50 +108,6 @@ class AIClient:
         }
 
         self.socketWrapper.send(actuators)
-        
-    def tune_hyperparameters(self) -> None:
-        """
-        Used to find the best parameters for tuning the neural network.
-        """
-        network = MLPRegressor()
-        param_grid = {
-            'hidden_layer_sizes': [(50,100,50)],
-            'activation': ['relu','tanh','logistic'],
-            'learning_rate_init': [.01, .015, .02],
-            'alpha': [.01, .025, .05],
-            'learning_rate': ['constant','adaptive'],
-            'solver': ['adam'],
-            'max_iter': [30000],
-            'n_iter_no_change': [1000]
-        }
-
-        gsc = GridSearchCV(network,
-                           param_grid,
-                           cv=2, 
-                           scoring='neg_mean_squared_error', 
-                           verbose=1, 
-                           n_jobs=-1)
-        
-        grid_result = gsc.fit(X, Y)
-        best_params = grid_result.best_params_
-
-        best_mlp = MLPRegressor(hidden_layer_sizes = best_params["hidden_layer_sizes"], 
-                                activation = best_params["activation"],
-                                verbose = True,
-                                learning_rate = best_params['learning_rate'],
-                                alpha = best_params['alpha'],
-                                solver = best_params["solver"],
-                                max_iter = 30000,
-                                n_iter_no_change = 1000
-        )
-        scoring = {
-            'abs_error': 'neg_mean_absolute_error',
-            'squared_error': 'neg_mean_squared_error',
-            'r2':'r2'
-        }
-        scores = cross_validate(best_mlp, X, Y, cv=2, scoring=scoring, return_train_score=True, return_estimator = True)
-        print(best_params)
-        print(scores)
     
     def plot_loss(self) -> None:
         """
@@ -171,10 +125,8 @@ class AIClient:
         loss_values = self.neuralNet.loss_curve_
         best_loss = self.neuralNet.best_loss_
         best_loss_iteration = loss_values.index(best_loss)
-        r2_score = cross_val_score(self.neuralNet, X, Y, cv=5, scoring='r2')
-        print(r2_score)
+        print(f"r2 score: {r2_score(Y, self.neuralNet.predict(X))}")
         plt.figure("Loss per iteration")
-        plt.subplot(2, 1, 1)
         plt.plot(loss_values, label="Loss")
         plt.plot(best_loss_iteration, best_loss, 'ro', label=f"Best loss: {round(best_loss, 2)}")
         plt.xlabel("Iterations")
