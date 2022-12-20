@@ -7,9 +7,10 @@ import socket as sc
 import numpy as np
 import pickle
 import socket_wrapper as sw
-from sklearn.neural_network import MLPRegressor
-from sklearn.preprocessing import MinMaxScaler
 import matplotlib.pyplot as plt
+from sklearn.neural_network import MLPRegressor
+from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import r2_score
 from serial_port import SerialPort
 
 ss.path += [os.path.abspath(relPath) for relPath in ('..',)]
@@ -20,7 +21,9 @@ lidar_input_dim = 15
 
 sampleFileName = 'default.samples'
 
-X = np.loadtxt("default.samples", delimiter=' ')
+samples = np.loadtxt("default.samples", delimiter=' ')
+X = samples[:, :-1]
+Y = samples[:, -1]
 
 modelSaveFile = 'model.sav'
 
@@ -29,8 +32,9 @@ def getTargetVelocity(steeringAngle) -> float:
     return (90 - abs(steeringAngle)) / 60
 
 def normalize_data() -> None:
-    scaler = MinMaxScaler()
-    X[:, :-1] = scaler.fit_transform(X[:, :-1])
+    global X
+    scaler = StandardScaler()
+    X = scaler.fit_transform(X)
 
 class AIClient:
     def __init__(self) -> None:
@@ -39,15 +43,14 @@ class AIClient:
     def train_network(self) -> None:
         print("Training...")
         normalize_data()
-        self.neuralNet = MLPRegressor(learning_rate_init=0.01,
-                                      learning_rate='constant',
-                                      n_iter_no_change=1000,
+        self.neuralNet = MLPRegressor(learning_rate_init=.01,
+                                      n_iter_no_change=2000,
+                                      activation='tanh',
                                       verbose=True,
                                       random_state=1,
-                                      hidden_layer_sizes=150,
-                                      max_iter=100000)
-        self.neuralNet.fit(X[:, :-1], X[:, -1])
-        print(self.neuralNet.best_loss_)
+                                      hidden_layer_sizes=(100, 50),
+                                      max_iter=20000)
+        self.neuralNet.fit(X, Y)
         pickle.dump(self.neuralNet, open(modelSaveFile, 'wb'))
         print(f"Training finished in {self.neuralNet.n_iter_} cycles.")
 
@@ -107,7 +110,7 @@ class AIClient:
         }
 
         self.socketWrapper.send(actuators)
-        
+    
     def plot_loss(self) -> None:
         """
         Plots the model loss over the number of iterations it has performed.
@@ -115,23 +118,23 @@ class AIClient:
         """
         try:
             with open(modelSaveFile, 'rb') as file:
-                self.neuralNet = pickle.load(file)
+                self.neuralNet : MLPRegressor = pickle.load(file)
         except Exception:
             self.train_network()
             with open(modelSaveFile, 'rb') as file:
-                self.neuralNet = pickle.load(file)
+                self.neuralNet : MLPRegressor = pickle.load(file)
             
         loss_values = self.neuralNet.loss_curve_
         best_loss = self.neuralNet.best_loss_
         best_loss_iteration = loss_values.index(best_loss)
+        print(f"r2 score: {r2_score(Y, self.neuralNet.predict(X))}")
         plt.figure("Loss per iteration")
         plt.plot(loss_values, label="Loss")
-        plt.plot(best_loss_iteration, best_loss, 'ro', label=f"Best loss ({round(best_loss, 2)})")
+        plt.plot(best_loss_iteration, best_loss, 'ro', label=f"Best loss: {round(best_loss, 2)}")
         plt.xlabel("Iterations")
         plt.ylabel("Loss")
         plt.legend()
         plt.show()
-
 
 class RLClient:
     def __init__(self,
