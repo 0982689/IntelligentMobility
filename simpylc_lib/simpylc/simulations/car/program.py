@@ -1,6 +1,7 @@
 from threading import Thread
 from clients import RLClient
 import time
+import random
 
 
 # Make threaded class for reading the arduino via serial
@@ -19,7 +20,9 @@ class ReadAndProcess(Thread):
 # 40, 200, 360
 # Main starts program to read serial
 if __name__ == "__main__":
-    try_list = [20, 10, 35, -10, -20, 30]
+    try_list = []
+    for i in range(20):
+        try_list.append(random.randint(-35, 35))
     # serial_arduino = SerialPort(9600)
     # read_and_process_thread = ReadAndProcess(serial_class=serial_arduino)
     # read_and_process_thread.start()
