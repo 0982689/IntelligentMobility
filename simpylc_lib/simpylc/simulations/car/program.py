@@ -30,6 +30,6 @@ if __name__ == "__main__":
     client = RLClient()
     for i in try_list:
         client.servo.set_pulse(i)
-        time.sleep(.1)
+        time.sleep(.2)
     # client = AIClient()
     # client.use_sim()
