@@ -26,8 +26,6 @@ if __name__ == "__main__":
     client = RLClient()
     for z in range(0, 11):
         try:
-            if z == 1:
-                continue
             print(f"Busnum = {z}")
             client.motors.busnum = z
             for y in range (1, 16):
