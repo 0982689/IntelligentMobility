@@ -1,3 +1,4 @@
+import time
 import time as tm
 from actuators import PWMMotors, PWMServo
 import sys as ss
@@ -9,6 +10,7 @@ import socket_wrapper as sw
 from sklearn.neural_network import MLPRegressor
 from sklearn.preprocessing import MinMaxScaler
 import matplotlib.pyplot as plt
+from serial_port import SerialPort
 
 ss.path += [os.path.abspath(relPath) for relPath in ('..',)]
 
@@ -132,6 +134,22 @@ class AIClient:
 
 
 class RLClient:
-    def __init__(self) -> None:
+    def __init__(self,
+                 serial_class: SerialPort) -> None:
         self.motors = PWMMotors()
         self.servo = PWMServo()
+        self.serial_class = serial_class
+        self.neural_net_rl = ...
+
+    def start_client(self) -> None:
+        try:
+            with open(modelSaveFile, 'rb') as file:
+                self.neural_net_rl = pickle.load(file)
+        except Exception:
+            raise FileNotFoundError
+        print("Loaded model.")
+
+    def run_with_lidar(self):
+        steering_angle = self.neural_net_rl.predict(self.serial_class.return_processed_array())
+        self.servo.set_pulse(int(steering_angle))
+        time.sleep(.2)

@@ -34,7 +34,7 @@ class SerialPort:
 
         self.processed_array = temp_data
 
-    def return_processed_array(self) -> Union[List[None], List[int]]:
+    def return_processed_array(self) -> Union[List[None], List[float]]:
         """
         Returns processed array.
         """
