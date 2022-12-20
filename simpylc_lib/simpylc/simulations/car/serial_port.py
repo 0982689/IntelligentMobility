@@ -12,7 +12,7 @@ def find_open_port() -> Union[None, str]:
 class SerialPort:
     def __init__(self, baud) -> None:
         port = find_open_port()
-        self.processed_array = [None] * 18
+        self.processed_array = [None] * 15
         self.open_port = Serial(port, baud, timeout=.1)
         print(f"connected to: {self.open_port.portstr}")
 
@@ -30,7 +30,7 @@ class SerialPort:
             return
 
         temp_data = unprocessed_data.split(",")
-        temp_data = [int(temp_data[id]) for id in range(9, 90, 10)] + [int(temp_data[id]) for id in range(269, 360, 10)]
+        temp_data = [int(string_int) for string_int in temp_data]
 
         self.processed_array = temp_data
 
