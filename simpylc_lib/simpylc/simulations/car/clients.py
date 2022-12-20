@@ -162,6 +162,7 @@ class RLClient:
         if all(x is None for x in array):
             return
         else:
+            array = [array]
             steering_angle = self.neural_net_rl.predict(array)[0]
             print(steering_angle)
             self.servo.set_pulse(int(steering_angle))
