@@ -31,10 +31,12 @@ modelSaveFile = 'model.sav'
 def getTargetVelocity(steeringAngle) -> float:
     return (90 - abs(steeringAngle)) / 60
 
+
 def normalize_data() -> None:
     global X
     scaler = StandardScaler()
     X = scaler.fit_transform(X)
+
 
 class AIClient:
     def __init__(self) -> None:
@@ -111,7 +113,6 @@ class AIClient:
 
         self.socketWrapper.send(actuators)
 
-
     def plot_loss(self) -> None:
         """
         Plots the model loss over the number of iterations it has performed.
@@ -119,12 +120,12 @@ class AIClient:
         """
         try:
             with open(modelSaveFile, 'rb') as file:
-                self.neuralNet : MLPRegressor = pickle.load(file)
+                self.neuralNet: MLPRegressor = pickle.load(file)
         except Exception:
             self.train_network()
             with open(modelSaveFile, 'rb') as file:
-                self.neuralNet : MLPRegressor = pickle.load(file)
-            
+                self.neuralNet: MLPRegressor = pickle.load(file)
+
                 self.neuralNet = pickle.load(file)
 
         loss_values = self.neuralNet.loss_curve_
