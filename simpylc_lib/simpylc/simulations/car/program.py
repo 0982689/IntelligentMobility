@@ -35,7 +35,7 @@ if __name__ == "__main__":
                 #     print(f"pulse: {x}")
                 #     client.motors.run(x)
                 client.motors.run(200)
-                time.sleep(3)
+                time.sleep(2)
         except:
             pass
     client.motors.run(500)
