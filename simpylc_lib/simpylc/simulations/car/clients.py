@@ -163,7 +163,11 @@ class RLClient:
             return
         else:
             array = [array]
-            steering_angle = self.neural_net_rl.predict(array)[0]
+            try:
+                steering_angle = self.neural_net_rl.predict(array)[0]
+            except Exception as e:
+                print(e)
+                return
             print(steering_angle)
             self.servo.set_pulse(int(steering_angle))
             time.sleep(.2)
