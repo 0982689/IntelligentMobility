@@ -23,7 +23,7 @@ if __name__ == "__main__":
     # read_and_process_thread.start()
     # read_and_process_thread.join()
     client = RLClient()
-    for x in range(100, 200, 2000):
+    for x in range(100, 2000, 100):
         print(x)
         client.motors.run(x)
     client.motors.run(500)
