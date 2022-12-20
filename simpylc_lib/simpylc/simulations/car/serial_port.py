@@ -30,9 +30,11 @@ class SerialPort:
             return
 
         temp_data = unprocessed_data.split(",")
-        temp_data = [int(string_int) for string_int in temp_data]
-
-        self.processed_array = temp_data
+        try:
+            temp_data = [int(string_int) for string_int in temp_data]
+            self.processed_array = temp_data
+        except Exception as e:
+            print(e)
 
     def return_processed_array(self) -> Union[List[None], List[float]]:
         """
