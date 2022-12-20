@@ -21,7 +21,7 @@ class ReadAndProcess(Thread):
 # Main starts program to read serial
 if __name__ == "__main__":
     try_list = []
-    for i in range(20):
+    for i in range(100):
         try_list.append(random.randint(-35, 35))
     # serial_arduino = SerialPort(9600)
     # read_and_process_thread = ReadAndProcess(serial_class=serial_arduino)
