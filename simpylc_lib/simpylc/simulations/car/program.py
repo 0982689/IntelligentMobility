@@ -23,12 +23,17 @@ if __name__ == "__main__":
     # read_and_process_thread.start()
     # read_and_process_thread.join()
     client = RLClient()
-    for y in range (1, 17):
-        client.motors.channel = y
-        print(client.motors.channel)
-        for x in range(100, 2000, 100):
-            print(x)
-            client.motors.run(x)
+    for z in range(0, 11):
+        if z == 1:
+            continue
+        print(f"Busnum = {z}")
+        client.motors.busnum = z
+        for y in range (1, 16):
+            client.motors.channel = y
+            print(f"Busnum {z} with channel: {client.motors.channel}")
+            for x in range(100, 2000, 100):
+                print(f"pulse: {x}")
+                client.motors.run(x)
     client.motors.run(500)
     # client.servo.run(40)
     # client = AIClient()

@@ -8,6 +8,7 @@ from utils import map_range
 class _PCA9685:
     def __init__(self, channel, address=0x40, frequency=60, busnum=None, init_delay=0.1) -> None:
         self.default_freq = 60
+        self.busnum = busnum
         self.pwm_scale = frequency / self.default_freq
         if busnum is not None:
             def get_bus() -> Literal[0, 1]:
@@ -37,5 +38,5 @@ class PWMServo(_PCA9685):
 
 
 class PWMMotors(_PCA9685):
-    def __init__(self, channel: int = 1) -> None:
-        super().__init__(channel=channel, busnum=1)
+    def __init__(self, channel: int = 1, busnum=1) -> None:
+        super().__init__(channel=channel, busnum=busnum)
