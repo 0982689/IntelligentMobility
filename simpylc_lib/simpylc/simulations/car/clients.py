@@ -159,5 +159,6 @@ class RLClient:
 
     def run_with_lidar(self) -> None:
         steering_angle = self.neural_net_rl.predict(self.serial_class.return_processed_array())
+        print(steering_angle)
         self.servo.set_pulse(int(steering_angle))
         time.sleep(.2)

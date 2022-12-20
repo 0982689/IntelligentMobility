@@ -13,7 +13,6 @@ class ReadAndProcess(Thread):
     def run(self) -> None:
         while True:
             self.serial_class.read_data()
-            print(self.serial_class.return_processed_array())
 
 
 class DriveClient(Thread):
