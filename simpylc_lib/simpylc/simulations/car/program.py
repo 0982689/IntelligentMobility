@@ -32,9 +32,10 @@ if __name__ == "__main__":
             for y in range (1, 16):
                 client.motors.channel = y
                 print(f"Busnum {z} with channel: {client.motors.channel}")
-                for x in range(100, 2000, 100):
-                    print(f"pulse: {x}")
-                    client.motors.run(x)
+                # for x in range(100, 2000, 100):
+                #     print(f"pulse: {x}")
+                #     client.motors.run(x)
+                client.motors.run(200)
         except:
             pass
     client.motors.run(500)
