@@ -26,7 +26,7 @@ class _PCA9685:
         self.pwm.set_pwm(self.channel, 0, int(self._map_servo_pulse(pulse) * self.pwm_scale))
 
     # -35, 35 || 40, 360
-    def map_servo_pulse(self, pulse: int) -> int:
+    def _map_servo_pulse(self, pulse: int) -> int:
         return int((pulse - (-35)) * (360 - 40) / (35 - (-35)) + 40)
 
 
