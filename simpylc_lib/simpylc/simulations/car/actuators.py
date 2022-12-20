@@ -2,7 +2,6 @@ import time
 import Adafruit_PCA9685
 from Adafruit_GPIO import I2C
 from typing import Literal
-from utils import map_range
 
 
 class _PCA9685:
@@ -19,15 +18,19 @@ class _PCA9685:
         self.channel = channel
         time.sleep(init_delay)
 
-    def set_pulse(self, pulse) -> None:
+    def set_pulse(self, pulse: int) -> None:
         # try:
         #     self.pwm.set_pwm(self.channel, 0, int(pulse * self.pwm_scale))
         # except:
         #     self.pwm.set_pwm(self.channel, 0, int(pulse * self.pwm_scale))
-        self.pwm.set_pwm(self.channel, 0, int(pulse * self.pwm_scale))
+        self.pwm.set_pwm(self.channel, 0, int(self._map_servo_pulse(pulse) * self.pwm_scale))
 
-    def run(self, pulse) -> None:
-        self.set_pulse(pulse)
+    # -35, 35 || 40, 360
+    def map_servo_pulse(self, pulse: int) -> int:
+        return int((pulse - (-35)) * (360 - 40) / (35 - (-35)) + 40)
+
+
+1
 
 
 # Steering channel = 12, Throttle channel = 13
