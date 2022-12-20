@@ -24,5 +24,6 @@ if __name__ == "__main__":
     # read_and_process_thread.join()
     client = RLClient()
     client.motors.run(500)
+    client.servo.run(40)
     # client = AIClient()
     # client.use_sim()
