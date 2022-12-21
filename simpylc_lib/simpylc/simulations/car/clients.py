@@ -9,7 +9,8 @@ import pickle
 import socket_wrapper as sw
 import matplotlib.pyplot as plt
 from sklearn.neural_network import MLPRegressor
-from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import MinMaxScaler
+from sklearn.model_selection import train_test_split
 from sklearn.metrics import r2_score
 from serial_port import SerialPort
 
@@ -24,19 +25,18 @@ sampleFileName = 'default.samples'
 samples = np.loadtxt("default.samples", delimiter=' ')
 X = samples[:, :-1]
 Y = samples[:, -1]
+x_train, x_test, y_train, y_test = train_test_split(X, Y, test_size=.2, random_state=1)
 
 modelSaveFile = 'model.sav'
-
 
 def getTargetVelocity(steeringAngle) -> float:
     return (90 - abs(steeringAngle)) / 60
 
-
 def normalize_data() -> None:
-    global X
-    scaler = StandardScaler()
-    X = scaler.fit_transform(X)
-
+    global x_train_nor, x_test_nor
+    scaler = MinMaxScaler()
+    x_train_nor = scaler.fit_transform(x_train)
+    x_test_nor = scaler.transform(x_test)
 
 class AIClient:
     def __init__(self) -> None:
@@ -47,12 +47,11 @@ class AIClient:
         normalize_data()
         self.neuralNet = MLPRegressor(learning_rate_init=.01,
                                       n_iter_no_change=2000,
-                                      activation='tanh',
                                       verbose=True,
                                       random_state=1,
-                                      hidden_layer_sizes=(100, 50),
+                                      hidden_layer_sizes=(100,50),
                                       max_iter=20000)
-        self.neuralNet.fit(X, Y)
+        self.neuralNet.fit(x_train_nor, y_train)
         pickle.dump(self.neuralNet, open(modelSaveFile, 'wb'))
         print(f"Training finished in {self.neuralNet.n_iter_} cycles.")
 
@@ -120,18 +119,17 @@ class AIClient:
         """
         try:
             with open(modelSaveFile, 'rb') as file:
+                normalize_data()
                 self.neuralNet: MLPRegressor = pickle.load(file)
         except Exception:
             self.train_network()
             with open(modelSaveFile, 'rb') as file:
                 self.neuralNet: MLPRegressor = pickle.load(file)
 
-                self.neuralNet = pickle.load(file)
-
         loss_values = self.neuralNet.loss_curve_
         best_loss = self.neuralNet.best_loss_
         best_loss_iteration = loss_values.index(best_loss)
-        print(f"r2 score: {r2_score(Y, self.neuralNet.predict(X))}")
+        print(f"r2 score: {r2_score(y_test, self.neuralNet.predict(x_test_nor))}")
         plt.figure("Loss per iteration")
         plt.plot(loss_values, label="Loss")
         plt.plot(best_loss_iteration, best_loss, 'ro', label=f"Best loss: {round(best_loss, 2)}")
@@ -140,10 +138,8 @@ class AIClient:
         plt.legend()
         plt.show()
 
-
 class RLClient:
-    def __init__(self,
-                 serial_class: SerialPort) -> None:
+    def __init__(self, serial_class: SerialPort) -> None:
         self.motors = PWMMotors()
         self.servo = PWMServo()
         self.serial_class = serial_class
@@ -162,9 +158,8 @@ class RLClient:
         if all(x is None for x in array):
             return
         else:
-            array = [array]
             try:
-                steering_angle = self.neural_net_rl.predict(array)[0]
+                steering_angle = self.neural_net_rl.predict([array])[0]
             except Exception as e:
                 print(e)
                 return
