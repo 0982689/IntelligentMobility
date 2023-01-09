@@ -12,9 +12,6 @@ from sklearn.neural_network import MLPRegressor
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split, GridSearchCV
 from serial_port import SerialPort
-# from keras.layers import Dense
-# from keras.models import Sequential
-# from keras.callbacks import EarlyStopping
 
 ss.path += [os.path.abspath(relPath) for relPath in ('..',)]
 
@@ -46,35 +43,35 @@ class AIClient:
     def train_network(self) -> None:
         print("Training...")
         self.neuralNet = MLPRegressor(learning_rate_init=.01,
-                                      validation_fraction=.2,
                                       solver='sgd',
                                       activation='tanh',
-                                      early_stopping=False,
+                                      learning_rate='adaptive',
+                                      early_stopping=True,
                                       n_iter_no_change=2000,
                                       verbose=True,
                                       random_state=1,
-                                      hidden_layer_sizes=(100,50),
+                                      hidden_layer_sizes=(136),
                                       max_iter=25000)
-        # self.neuralNet.fit(X_train, y_train)
+        self.neuralNet.fit(X_train, y_train)
         print(f"Training finished in {self.neuralNet.n_iter_} cycles.")
-        param_list = {"hidden_layer_sizes": [(x,) for x in np.arange(60,150,2)]}
-        gridCV = GridSearchCV(estimator=self.neuralNet, param_grid=param_list, verbose=3)
-        gridCV.fit(X_train, y_train)
-        print(gridCV.best_params_)
-        # value1 = self.neuralNet.predict([[20.0,20.0,20.0,20.0,2.0151,20.0,0.6457,3.7918,20.0,20.0,20.0,20.0,1.3204,20.0,20.0]])
-        # value2 = self.neuralNet.predict([[4.1373,20.0,4.2083,5.3012,20.0,4.3537,1.4576,6.4257,20.0,4.1282,3.3072,20.0,20.0,4.8298,3.9211]])
-        # print(f"7.0 : {value1}")
-        # print(f"1.5 : {value2}")    
-        # y_pred = self.neuralNet.predict(X_test)
-        # plt.plot(y_test, 'ro', label = 'Real data')
-        # plt.plot(y_pred, 'bo', label = 'Predicted data')
-        # plt.title('Prediction')
-        # plt.xlabel('Items')
-        # plt.ylabel('Values')
-        # plt.legend()
-        # plt.show()
-        # with open(modelSaveFile, 'wb') as file:
-        #     pickle.dump(self.neuralNet, file, protocol=pickle.HIGHEST_PROTOCOL)
+        # param_list = {"hidden_layer_sizes": [(x,) for x in np.arange(100,150,1)]}
+        # gridCV = GridSearchCV(estimator=self.neuralNet, param_grid=param_list, verbose=3)
+        # gridCV.fit(X_train, y_train)
+        # print(gridCV.best_params_)
+        value1 = self.neuralNet.predict([[7.3915,6.7987,8.3401,10.2151,12.8888,5.7073,7.8072,5.8447,20.0,5.2171,2.7175,4.2663,5.478,4.7481,1.4015]])
+        value2 = self.neuralNet.predict([[4.1373,20.0,4.2083,5.3012,20.0,4.3537,1.4576,6.4257,20.0,4.1282,3.3072,20.0,20.0,4.8298,3.9211]])
+        print(f"-33.0 : {value1}")
+        print(f"1.5 : {value2}")    
+        y_pred = self.neuralNet.predict(X_test)
+        plt.plot(y_test, 'ro', label = 'Real data')
+        plt.plot(y_pred, 'bo', label = 'Predicted data')
+        plt.title('Prediction')
+        plt.xlabel('Items')
+        plt.ylabel('Values')
+        plt.legend()
+        plt.show()
+        with open(modelSaveFile, 'wb') as file:
+            pickle.dump(self.neuralNet, file, protocol=pickle.HIGHEST_PROTOCOL)
 
     def use_sim(self) -> None:
         try:
