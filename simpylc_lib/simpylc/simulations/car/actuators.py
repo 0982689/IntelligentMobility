@@ -19,12 +19,28 @@ class _PCA9685:
         time.sleep(init_delay)
 
     def set_pulse(self, pulse: int) -> None:
+        """
+        Set the pulse of the servo or motors.
+
+        :param pulse: Pulse which gets used by the servo or motor
+        :return: None
+        """
         self.pwm.set_pwm(self.channel, 0, int(self._map_servo_pulse(pulse) * self.pwm_scale))
 
-    # -35, 35 || 40, 360
     @staticmethod
-    def _map_servo_pulse(pulse: int) -> int:
-        return int((pulse - (-35)) * (360 - 40) / (35 - (-35)) + 40)
+    def _map_servo_pulse(pulse: int, min_input=-35, min_output=40, max_input=35, max_output=360) -> int:
+        """
+        Map steering pulse from output of the neural network,
+        to a pulse which has the same steering angle on the vehicle.
+
+        :param pulse: pulse generated from the neural network
+        :param min_input: minimal input pulse from the neural network
+        :param min_output: minimal output pulse for the vehicle
+        :param max_input: maximum input pulse from the neural network
+        :param max_output: maximum output pulse for the vehicle
+        :return:  Return the mapped pulse as int
+        """
+        return int((pulse - min_input) * (max_output - min_output) / (max_input - min_input) + min_output)
 
 
 # Steering channel = 12, Throttle channel = 13
