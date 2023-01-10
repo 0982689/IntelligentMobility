@@ -40,6 +40,7 @@ class SerialPort:
         """
         Returns processed array.
         """
+        print(self.processed_array)
         return self.processed_array
 
 
