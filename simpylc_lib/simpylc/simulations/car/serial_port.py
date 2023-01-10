@@ -36,7 +36,7 @@ class SerialPort:
         except Exception as e:
             print(e)
 
-    def return_processed_array(self) -> Union[List[None], List[float]]:
+    def return_processed_array(self) -> Union[List[None], List[int]]:
         """
         Returns processed array.
         """
