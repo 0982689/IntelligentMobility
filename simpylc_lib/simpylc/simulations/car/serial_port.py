@@ -30,7 +30,6 @@ class SerialPort:
             return
 
         temp_data = unprocessed_data.split(",")
-        print(temp_data)
         try:
             temp_data = [int(string_int) for string_int in temp_data]
             self.processed_array = temp_data
