@@ -8,8 +8,10 @@ import numpy as np
 import pickle
 import socket_wrapper as sw
 import matplotlib.pyplot as plt
+from keras.layers import Dense, Dropout
+from keras.models import Sequential
 from sklearn.neural_network import MLPRegressor
-from sklearn.preprocessing import StandardScaler, MinMaxScaler, RobustScaler
+from sklearn.preprocessing import MinMaxScaler
 from sklearn.metrics import mean_squared_error
 from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.metrics import r2_score
@@ -45,15 +47,22 @@ class AIClient:
 
     def train_network(self) -> None:
         print("Training...")
+        # self.neuralNet = Sequential()
+        # self.neuralNet.add(Dense(units=50, input_shape=(15, ), activation='relu'))
+        # self.neuralNet.add(Dense(units=50, activation='relu'))
+        # self.neuralNet.add(Dense(units=1, activation='linear'))
+
+        # self.neuralNet.compile(optimizer='adam', loss='mse')
+        # self.neuralNet.fit(X_train, y_train, batch_size=19, epochs=1000)
         self.neuralNet = MLPRegressor(learning_rate_init=.01,
                                       solver='sgd',
                                       activation='relu', 
                                       learning_rate='adaptive',
                                       early_stopping=True,
-                                      n_iter_no_change=200,
+                                      n_iter_no_change=1000,
                                       verbose=True,
                                       random_state=1,
-                                      hidden_layer_sizes=(240), #260
+                                      hidden_layer_sizes=(240), #240
                                       max_iter=20000)
         self.neuralNet.fit(X_train, y_train)
         print(f"Training finished in {self.neuralNet.n_iter_} cycles.")
@@ -61,12 +70,10 @@ class AIClient:
         # gridCV = GridSearchCV(estimator=self.neuralNet, param_grid=param_list, verbose=2, scoring='r2', cv=4)
         # gridCV.fit(X_train, y_train)
         # print(gridCV.best_params_)
-        value1 = self.neuralNet.predict([[7.3915,6.7987,8.3401,10.2151,12.8888,5.7073,7.8072,5.8447,20.0,5.2171,2.7175,4.2663,5.478,4.7481,1.4015]])
-        value2 = self.neuralNet.predict([[4.1373,20.0,4.2083,5.3012,20.0,4.3537,1.4576,6.4257,20.0,4.1282,3.3072,20.0,20.0,4.8298,3.9211]])
-        print(f"-33.0 : {value1}")
-        print(f"1.5 : {value2}")    
+        prediction = self.neuralNet.predict(mm_scaler.transform([[20.0,20.0,20.0,20.0,2.1962,0.8001,20.0,3.9276,20.0,20.0,20.0,20.0,1.4901,20.0,20.0]]))
+        print(f"7.0 : {prediction}")  
         y_pred = self.neuralNet.predict(X_test)
-        print(f"test mse: {mean_squared_error(y_test, y_pred)}")
+        print(f"test rmse: {mean_squared_error(y_test, y_pred, squared=False)}")
         plt.plot(y_test, 'ro', label = 'Real data')
         plt.plot(y_pred, 'bo', label = 'Predicted data')
         plt.title('Prediction')
