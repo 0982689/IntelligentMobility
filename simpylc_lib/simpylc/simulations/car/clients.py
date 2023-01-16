@@ -8,13 +8,10 @@ import numpy as np
 import pickle
 import socket_wrapper as sw
 import matplotlib.pyplot as plt
-from keras.layers import Dense, Dropout
-from keras.models import Sequential
 from sklearn.neural_network import MLPRegressor
-from sklearn.preprocessing import MinMaxScaler
+from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import mean_squared_error
 from sklearn.model_selection import train_test_split, GridSearchCV
-from sklearn.metrics import r2_score
 from serial_port import SerialPort
 
 ss.path += [os.path.abspath(relPath) for relPath in ('..',)]
@@ -31,10 +28,10 @@ y = samples[:, -1]
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=.2, random_state=1)
 
-#Normalization
-mm_scaler = MinMaxScaler(feature_range=(-1,1))
-X_train = mm_scaler.fit_transform(X_train)
-X_test = mm_scaler.transform(X_test)
+# scaler = MinMaxScaler(feature_range=(-1,1))
+scaler = StandardScaler()
+X_train = scaler.fit_transform(X_train)
+X_test = scaler.transform(X_test)
 
 modelSaveFile = 'model.sav'
 
@@ -47,31 +44,22 @@ class AIClient:
 
     def train_network(self) -> None:
         print("Training...")
-        # self.neuralNet = Sequential()
-        # self.neuralNet.add(Dense(units=50, input_shape=(15, ), activation='relu'))
-        # self.neuralNet.add(Dense(units=50, activation='relu'))
-        # self.neuralNet.add(Dense(units=1, activation='linear'))
-
-        # self.neuralNet.compile(optimizer='adam', loss='mse')
-        # self.neuralNet.fit(X_train, y_train, batch_size=19, epochs=1000)
         self.neuralNet = MLPRegressor(learning_rate_init=.01,
                                       solver='sgd',
-                                      activation='relu', 
+                                      activation='tanh', 
                                       learning_rate='adaptive',
                                       early_stopping=True,
-                                      n_iter_no_change=1000,
+                                      n_iter_no_change=200,
                                       verbose=True,
                                       random_state=1,
-                                      hidden_layer_sizes=(240), #240
+                                      hidden_layer_sizes=(136, ),
                                       max_iter=20000)
         self.neuralNet.fit(X_train, y_train)
         print(f"Training finished in {self.neuralNet.n_iter_} cycles.")
-        # param_list = {"hidden_layer_sizes": [(x, ) for x in range(100, 150, 2)]}
-        # gridCV = GridSearchCV(estimator=self.neuralNet, param_grid=param_list, verbose=2, scoring='r2', cv=4)
-        # gridCV.fit(X_train, y_train)
-        # print(gridCV.best_params_)
-        prediction = self.neuralNet.predict(mm_scaler.transform([[20.0,20.0,20.0,20.0,2.1962,0.8001,20.0,3.9276,20.0,20.0,20.0,20.0,1.4901,20.0,20.0]]))
-        print(f"7.0 : {prediction}")  
+        prediction1 = self.neuralNet.predict(scaler.transform([[20.0,20.0,20.0,20.0,2.1962,0.8001,20.0,3.9276,20.0,20.0,20.0,20.0,1.4901,20.0,20.0]]))
+        prediction2 = self.neuralNet.predict(scaler.transform([[4.2415,5.0588,20.0,20.0,3.4809,20.0,20.0,5.3425,20.0,2.0978,6.9884,3.374,6.8075,2.1218,7.0956]]))
+        print(f"7.0 : {prediction1}")  
+        print(f"-38.5 : {prediction2}") 
         y_pred = self.neuralNet.predict(X_test)
         print(f"test rmse: {mean_squared_error(y_test, y_pred, squared=False)}")
         plt.plot(y_test, 'ro', label = 'Real data')
@@ -81,9 +69,8 @@ class AIClient:
         plt.ylabel('Values')
         plt.legend()
         plt.show()
-        # print(f"r2 score: {r2_score(y_pred=y_pred, y_true=y_test)}")
-        # with open(modelSaveFile, 'wb') as file:
-        #     pickle.dump(self.neuralNet, file, protocol=pickle.HIGHEST_PROTOCOL)
+        with open(modelSaveFile, 'wb') as file:
+            pickle.dump(self.neuralNet, file, protocol=pickle.HIGHEST_PROTOCOL)
     
 
     def use_sim(self) -> None:
