@@ -170,4 +170,4 @@ class RLClient:
                 return
             print(steering_angle)
             self.servo.set_pulse(int(steering_angle))
-            time.sleep(.8)
+            time.sleep(.5)
