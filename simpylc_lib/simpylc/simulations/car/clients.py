@@ -168,6 +168,5 @@ class RLClient:
             except Exception as e:
                 print(e)
                 return
-            print(steering_angle)
             self.servo.set_pulse(int(steering_angle))
             time.sleep(.7)
