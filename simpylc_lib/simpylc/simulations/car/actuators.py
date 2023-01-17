@@ -43,7 +43,7 @@ class _PCA9685:
         return int((pulse - min_input) * (max_output - min_output) / (max_input - min_input) + min_output)
 
 
-# Steering channel = 12, Throttle channel = 13
+# Steering channel = 0, Throttle channel = 1
 class PWMServo(_PCA9685):
     def __init__(self, channel: int = 0) -> None:
         super().__init__(channel=channel, busnum=1)

@@ -24,7 +24,7 @@ class SerialPort:
         Reads unprocessed data and converts it into processed data.
         Processed array gets assigned.
         """
-        if self.open_port.port != None and self.open_port.in_waiting > 0:
+        if self.open_port.port is not None and self.open_port.in_waiting > 0:
             unprocessed_data = str(self.open_port.readline()[:-2], 'utf-8')
         else:
             return
