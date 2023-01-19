@@ -19,7 +19,7 @@ class _PCA9685:
         time.sleep(init_delay)
 
     def set_pulse(self, pulse: int) -> None:
-        self.pwm.set_pwm(self.channel, 0, int(self._map_servo_pulse(pulse) * self.pwm_scale))
+        self.pwm.set_pwm(self.channel, 0, int(pulse))
 
     # -35, 35 || 40, 360
     @staticmethod
