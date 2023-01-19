@@ -10,8 +10,7 @@ import socket_wrapper as sw
 import matplotlib.pyplot as plt
 from sklearn.neural_network import MLPRegressor
 from sklearn.preprocessing import StandardScaler
-from sklearn.metrics import mean_squared_error
-from sklearn.model_selection import train_test_split, GridSearchCV
+from sklearn.model_selection import train_test_split
 from sklearn.model_selection import train_test_split
 from serial_port import SerialPort
 
@@ -49,21 +48,13 @@ class AIClient:
                                       activation='tanh',
                                       learning_rate='adaptive',
                                       early_stopping=True,
-                                      n_iter_no_change=2000,
+                                      n_iter_no_change=200,
                                       verbose=True,
                                       random_state=1,
                                       hidden_layer_sizes=(136),
                                       max_iter=25000)
         self.neuralNet.fit(X_train, y_train)
         print(f"Training finished in {self.neuralNet.n_iter_} cycles.")
-        # param_list = {"hidden_layer_sizes": [(x,) for x in np.arange(100,150,1)]}
-        # gridCV = GridSearchCV(estimator=self.neuralNet, param_grid=param_list, verbose=3)
-        # gridCV.fit(X_train, y_train)
-        # print(gridCV.best_params_)
-        value1 = self.neuralNet.predict([[7.3915,6.7987,8.3401,10.2151,12.8888,5.7073,7.8072,5.8447,20.0,5.2171,2.7175,4.2663,5.478,4.7481,1.4015]])
-        value2 = self.neuralNet.predict([[4.1373,20.0,4.2083,5.3012,20.0,4.3537,1.4576,6.4257,20.0,4.1282,3.3072,20.0,20.0,4.8298,3.9211]])
-        print(f"-33.0 : {value1}")
-        print(f"1.5 : {value2}")    
         y_pred = self.neuralNet.predict(X_test)
         plt.plot(y_test, 'ro', label = 'Real data')
         plt.plot(y_pred, 'bo', label = 'Predicted data')
@@ -137,12 +128,11 @@ class RLClient:
         self.motors = PWMMotors()
         self.servo = PWMServo()
         self.serial_class = serial_class
-        self.neural_net_rl = ...
 
     def start_client(self) -> None:
         try:
             with open(modelSaveFile, 'rb') as file:
-                self.neural_net_rl = pickle.load(file)
+                self.neuralNet = pickle.load(file)
         except Exception:
             raise FileNotFoundError
         print("Loaded model.")
@@ -153,7 +143,7 @@ class RLClient:
             return
         else:
             try:
-                steering_angle = self.neural_net_rl.predict([array])[0]
+                steering_angle = self.neuralNet.predict(scaler.transform([array]))[0]
             except Exception as e:
                 print(e)
                 return
