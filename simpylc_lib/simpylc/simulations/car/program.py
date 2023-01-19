@@ -46,3 +46,5 @@ if __name__ == "__main__":
         tm.sleep(2)
         client.servo.set_pulse(40)
         print("Left")
+        
+        tm.sleep(2)
