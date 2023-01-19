@@ -40,11 +40,11 @@ if __name__ == "__main__":
     # drive_client.join()
     # read_and_process_thread.join()
     
-    for _ in range(10):
+    while True:
         client.servo.set_pulse(400)
         print("Right")
         tm.sleep(2)
-        client.servo.set_pulse(40)
+        client.servo.set_pulse(80)
         print("Left")
         
         tm.sleep(2)
