@@ -64,7 +64,7 @@ class AIClient:
         plt.legend()
         plt.show()
         with open(modelSaveFile, 'wb') as file:
-            pickle.dump(self.neuralNet, file, protocol=pickle.HIGHEST_PROTOCOL)
+            pickle.dump(self.neuralNet, file)
 
     def use_sim(self) -> None:
         try:
