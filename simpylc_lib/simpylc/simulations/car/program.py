@@ -39,7 +39,8 @@ if __name__ == "__main__":
     # read_and_process_thread.start()
     # drive_client.join()
     # read_and_process_thread.join()
-    client.servo.set_pulse(40)
     
+    client.servo.set_pulse(40)
+    tm.sleep(2)
     client.servo.set_pulse(360)
     print("Start")
