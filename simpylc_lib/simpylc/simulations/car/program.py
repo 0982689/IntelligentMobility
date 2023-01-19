@@ -1,6 +1,8 @@
 from threading import Thread
 from serial_port import SerialPort
 from clients import RLClient
+import time as tm
+
 
 
 # Make threaded class for reading the arduino via serial
@@ -31,9 +33,13 @@ class DriveClient(Thread):
 if __name__ == "__main__":
     serial_arduino = SerialPort(9600)
     client = RLClient(serial_class=serial_arduino)
-    drive_client = DriveClient(rl_client=client)
-    read_and_process_thread = ReadAndProcess(serial_class=serial_arduino)
-    drive_client.start()
-    read_and_process_thread.start()
-    drive_client.join()
-    read_and_process_thread.join()
+    # drive_client = DriveClient(rl_client=client)
+    # read_and_process_thread = ReadAndProcess(serial_class=serial_arduino)
+    # drive_client.start()
+    # read_and_process_thread.start()
+    # drive_client.join()
+    # read_and_process_thread.join()
+    client.servo.set_pulse(40)
+    
+    client.servo.set_pulse(360)
+    print("Start")
