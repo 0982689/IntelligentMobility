@@ -16,7 +16,7 @@ class _PCA9685:
         self.pwm = Adafruit_PCA9685.PCA9685(address=address)
         self.pwm.set_pwm_freq(frequency)
         self.channel = channel
-        time.sleep(init_delay)
+        #time.sleep(init_delay)
 
     def set_pulse(self, pulse: int) -> None:
         self.pwm.set_pwm(self.channel, 0, int(pulse))
